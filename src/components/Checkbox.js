@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
-import colors from '../../../components/shared/colors';
+import colors from './shared/colors';
 
 const Checkbox = ({style, checked, onPress}) => {
   return (

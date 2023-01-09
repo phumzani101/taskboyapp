@@ -1,17 +1,54 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {Alert, StyleSheet, Text, View} from 'react-native';
+import auth from '@react-native-firebase/auth';
 import Button from '../../../components/Button';
 import colors from '../../../components/shared/colors';
-import Input from '../components/Input';
+import Input from '../../../components/Input';
 
 const LoginScreen = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const onSubmit = async () => {
+    if (!email || !password) {
+      Alert.alert('Please enter your email and password');
+      return;
+    }
+
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(async authenticate => {})
+      .catch(error => {
+        if (error.code === 'auth/wrong-password') {
+          Alert.alert('Wrong password. please try again');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          Alert.alert('That email address is invalid!');
+        }
+
+        Alert.alert('Incorrect email or password');
+      });
+  };
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.title}>Welcome Back</Text>
-        <Input placeholder="Email" keyboardType="email-address" />
-        <Input placeholder="Password" secureTextEntry />
-        <Button style={styles.buttonBlue}>Log in</Button>
+        <Input
+          placeholder="Email"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={text => setEmail(text)}
+        />
+        <Input
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={text => setPassword(text)}
+        />
+        <Button style={styles.buttonBlue} onPress={onSubmit}>
+          Log in
+        </Button>
 
         <Text style={styles.footerText}>
           Not Registered?{' '}

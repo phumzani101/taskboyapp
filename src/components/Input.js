@@ -1,11 +1,11 @@
 import React from 'react';
 import {StyleSheet, TextInput} from 'react-native';
-import colors from '../../../components/shared/colors';
+import colors from './shared/colors';
 
-const Input = ({styleInput, ...props}) => {
+const Input = ({outlined, ...props}) => {
   return (
     <TextInput
-      style={[styles.input, styleInput]}
+      style={[styles.input, outlined ? styles.outlined : {}]}
       placeholderTextColor={colors.midGrey}
       {...props}
     />
@@ -21,6 +21,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 12,
     fontSize: 16,
+  },
+  outlined: {
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.black,
   },
 });
 
