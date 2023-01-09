@@ -2,14 +2,17 @@ import React, {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import AuthNavigation from './AuthNavigation';
 import AppNavigation from './AppNavigation';
+import {useDispatch, useSelector} from 'react-redux';
+import {loadUser} from '../store/slices/authSlice';
 
 const Navigation = () => {
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  const {user} = useSelector(state => state.auth);
+  const dispatch = useDispatch();
 
   // Handle user state changes
   function onAuthStateChanged(userAuth) {
-    setUser(userAuth);
+    dispatch(loadUser(userAuth));
     if (initializing) {
       setInitializing(false);
     }

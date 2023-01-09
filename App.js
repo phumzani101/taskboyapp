@@ -10,6 +10,8 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import Navigation from './src/navigation';
+import {Provider} from 'react-redux';
+import store from './src/store';
 
 const MyTheme = {
   ...DefaultTheme,
@@ -21,9 +23,11 @@ const MyTheme = {
 
 const App = () => {
   return (
-    <NavigationContainer theme={MyTheme}>
-      <Navigation />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer theme={MyTheme}>
+        <Navigation />
+      </NavigationContainer>
+    </Provider>
   );
 };
 

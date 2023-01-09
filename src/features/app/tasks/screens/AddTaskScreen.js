@@ -17,18 +17,22 @@ import categories from '../../../../components/shared/categories';
 import colors from '../../../../components/shared/colors';
 import Title from '../../../../components/Title';
 import DatePicker from '../components/Datepicker';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUpdated} from '../../../../store/slices/taskSlice';
 
 const AddTaskScreen = ({navigation}) => {
+  const {user} = useSelector(state => state.auth);
   const [category, setCategory] = useState('');
   const [date, setDate] = useState(new Date());
   const [title, setTitle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const onSubmit = async () => {
     const today = moment(new Date()).format('YYYY-MM-DD');
     const deadline = moment(date).format('YYYY-MM-DD');
-    if (!title || !date) {
-      Alert.alert('Please enter your task description and deadline');
+    if (!title || !date || !category) {
+      Alert.alert('Please enter all fields');
       return;
     }
 
@@ -39,14 +43,19 @@ const AddTaskScreen = ({navigation}) => {
     setIsLoading(true);
     firestore()
       .collection('Tasks')
-      .doc('ABC')
-      .set({
+      .add({
         title,
         deadline: date,
         category,
+        user: user?.uid,
+        checked: false,
       })
       .then(() => {
         setIsLoading(false);
+        dispatch(setUpdated());
+        setCategory('');
+        setTitle('');
+        setDate(new Date());
         navigation.navigate('Tasks');
         console.log('Task added!');
       })
